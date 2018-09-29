@@ -9,6 +9,7 @@
         <!-- Custom styles for this template -->
         <link href="{{ asset('css/blog.css') }}" rel="stylesheet">
     @endsection
+    <div class="container">
 
     @section('header')
         @include('layouts.partials.front-end._header')
@@ -25,7 +26,7 @@
     @section('breakingnews')
         @include('layouts.partials.front-end._breakingnews')
     @endsection
-
+    </div>
     {{--Page--}}
 
     @section('page')

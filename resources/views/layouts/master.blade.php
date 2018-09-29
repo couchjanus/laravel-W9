@@ -36,12 +36,12 @@
     <body class="@yield('body_class')">
 
         {{--Page--}}
-        <div class="container">
+
             @yield('header')
             @yield('navigation')
             @yield('jumbotron')
             @yield('breakingnews')
-        </div>
+
 
         <!-- Page Content -->
         @yield('breadcrumb')

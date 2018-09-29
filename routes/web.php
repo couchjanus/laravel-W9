@@ -18,13 +18,10 @@ Route::get('/', function () {
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 
 Route::get('/about', 'AboutController');
-
-Route::get('/test', 'TestController@index');
-
-
 Route::get('blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
-
-// Route::get('blog/create', ['uses' => 'PostsController@create', 'as' => 'create']);
-// Route::post('blog/store', ['uses' => 'PostsController@store', 'as' => 'store']);
-
 Route::get('blog/{id}', ['uses' => 'BlogController@show', 'as' => 'show']);
+
+Route::get('admin', 'Admin\DashboardController');
+
+Route::resource('posts', 'Admin\PostController');
+Route::resource('categories', 'Admin\CategoryController');

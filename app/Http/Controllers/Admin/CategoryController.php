@@ -1,36 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use Illuminate\Http\Request;
-use DB;
+use App\Http\Controllers\Controller;
 
-class BlogController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
-
     public function index()
     {
+        $categories = Category::all();
 
-        // $posts = DB::table('posts')->paginate(7);
-        $posts = DB::table('posts')->paginate(7)->onEachSide(1);
-        return view('blog.index2', ['posts' => $posts]);
-
+        return view('admin.categories.index')
+            ->with('categories', $categories);
     }
-
-
-
-    public function index3()
-    {
-        $posts = DB::table('posts')->simplePaginate(10);
-        return view('blog.index3', ['posts' => $posts]);
-    }
-
 
     /**
      * Show the form for creating a new resource.
@@ -39,7 +28,7 @@ class BlogController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        return view('admin.categories.create');
     }
 
     /**
@@ -48,61 +37,69 @@ class BlogController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-        public function store(Request $request)
-        {
-            DB::insert('insert into posts (title, content, category_id)
-            values (?, ?, ?)', [$request['title'], $request['content'], 1]);
+    public function store(Request $request)
+    {
+        $category = new Category;
 
-        }
+        $category->name = $request->name;
+
+        $category->save();
+
+        return redirect(route('categories.index'));
+    }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        $post = DB::select("select * from posts where id = :id", ['id' => $id]);
+        $category = Category::find($id);
 
-        return view('blog.show3', ['post' => $post]);
-
+        return view('admin.categories.show')->withCategory($category);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-       return view('posts.create');
-
+        $category = Category::find($id);
+        return view('admin.categories.edit')->withCategory($category);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        $sql = "UPDATE posts SET title= ? content= ? WHERE id= ?";
-        DB::update($sql, array($request['title'], $request['content'], 'id' => $id));
+        $category = Category::find($id);
 
+        $category->name = $request->input('name');
+        $category->save();
+
+        return redirect(route('categories.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        DB::table('posts')->where('id', '=', $id)->delete();
+        Category::find($id)->delete();
+
+        return redirect(route('categories.index'));
     }
 }
