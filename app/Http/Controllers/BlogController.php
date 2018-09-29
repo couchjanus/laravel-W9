@@ -5,21 +5,58 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 
-class PostsController extends Controller
+class BlogController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
 
         $posts = DB::select('select * from posts');
 
-        return view('blog.index', ['posts' => $posts]);
+        // $posts = DB::table('posts')->paginate(7);
+        // $posts = DB::table('posts')->paginate(7)->onEachSide(1);
+        return view('blog.index2', ['posts' => $posts]);
 
     }
+
+    public function index0()
+    {
+
+        $posts = DB::select('select * from posts');
+
+        return view('blog.index0', ['posts' => $posts]);
+
+    }
+
+    public function index1()
+    {
+        $posts = DB::select('select * from posts');
+
+        return view('blog.index1', ['posts' => $posts]);
+
+    }
+
+    public function index2()
+    {
+        $posts = DB::table('posts')->paginate(10);
+
+
+        return view('blog.index2', ['posts' => $posts]);
+
+    }
+
+    public function index3()
+    {
+        $posts = DB::table('posts')->simplePaginate(10);
+        return view('blog.index3', ['posts' => $posts]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -54,7 +91,7 @@ class PostsController extends Controller
     {
         $post = DB::select("select * from posts where id = :id", ['id' => $id]);
 
-        return view('posts.show', ['post' => $post]);
+        return view('blog.show3', ['post' => $post]);
 
     }
 
