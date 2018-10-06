@@ -7,12 +7,19 @@
 
           <div class="col-md-8 blog-main">
             <h3 class="pb-3 mb-4 font-italic border-bottom">
-              {{ $post[0]->title }}
+              {{ $post->title }}
             </h3>
 
-            @includeIf('blog.partials._single-post', ['post' => $post[0]])
+            @alert(['type' => 'danger'])
+                You are not allowed to access this resource now!
+            @endalert
+
+
+            @includeIf('blog.partials._single-post', ['post' => $post])
           </div>
           <!-- /.blog-main -->
+
+
 
     @endsection
 

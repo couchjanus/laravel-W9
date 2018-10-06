@@ -4,6 +4,14 @@
 <div class="container-fluid">
   <div class="animate fadeIn">
     <div class="col-md-12">
+            @if ($message = Session::get('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span class="badge badge-pill badge-success">Success</span> {!! $message !!}.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            @endif
       <div class="panel panel-default">
       <div class="panel-heading">Posts</div>
         <div class="panel-body">
@@ -13,7 +21,7 @@
             <br/>
             <br/>
             <div class="table-responsive">
-                  
+
               <table class="table table-hover">
                 <thead>
                   <tr>
@@ -61,8 +69,8 @@
                             </div>
                         </form>
                         </div>
-                  
-                  
+
+
                     @endforeach
                 </tbody>
               </table>
@@ -74,7 +82,7 @@
           </div>
         </div>
       </div>
-    </div>    
+    </div>
   </div>
 </div>
 

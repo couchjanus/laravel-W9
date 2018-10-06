@@ -6,6 +6,8 @@ use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\StorePostRequest;
+
 class PostController extends Controller
 {
     /**
@@ -15,7 +17,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $posts = \App\Post::paginate(10);
+        return view('admin.posts.index')
+        ->with('posts', $posts);
     }
 
     /**
@@ -25,7 +29,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = \App\Category::all();
+        $tags = \App\Tag::all();
+        return view('admin.posts.create')        ->with('categories', $categories)->withTags($tags);
     }
 
     /**
@@ -34,9 +40,12 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        //
+        $post = $request->all();
+        $post = new Post($post);
+        $post->save();
+        return redirect(route('posts.index'))->with('succes', 'An article has been created successfully');
     }
 
     /**
@@ -45,9 +54,10 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function show(Post $post)
+    public function show($id)
     {
-        //
+        $post = Post::find($id);
+        return view('admin.posts.show')->withPost($post);;
     }
 
     /**
@@ -56,9 +66,13 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function edit(Post $post)
+    public function edit($id)
     {
-        //
+        $post = Post::find($id);
+        $tags = \App\Tag::all();
+        $categories = \App\Category::pluck('name', 'id');
+        $data = ['post' => $post, 'categories' => $categories];
+        return view('admin.posts.edit', $data)->withTags($tags);
     }
 
     /**
@@ -68,9 +82,16 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->category_id = $request->category_id;
+        $post->is_active = $request->is_active;
+
+        $post->save();
+        return redirect(route('posts.index'))->with('success', 'An article has been updated successfully');
     }
 
     /**
@@ -79,8 +100,9 @@ class PostController extends Controller
      * @param  \App\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
-        //
+        Post::find($id)->delete();
+        return redirect(route('posts.index'))->with('success', 'An article has been delleted successfully');;
     }
 }

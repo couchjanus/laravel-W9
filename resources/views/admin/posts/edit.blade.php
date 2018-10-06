@@ -1,50 +1,44 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="container">
-
-        @if (Session::get('message') != Null)
-        <div class="row">
-            <div class="col-md-9">
-                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+<div class="container-fluid">
+  <div class="animate fadeIn">
+    <div class="col-md-12">
+            @if (count($errors) > 0)
+            <div class="row">
+              <div class="col-md-12">
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @foreach ($errors->all() as $error)
+                    <span class="badge badge-pill badge-danger">Error</span> {!! $error !!}.
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                     </button>
-                    {{ Session::get('message') }}
+                    @endforeach
                 </div>
+              </div>
             </div>
-        </div>
-        @endif
+            @endif
 
-        <div class="row">
-            @include('admin.sidebar')
-
-            <div class="col-md-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Edit article</div>
-                    <div class="panel-body">
-                        <a href="{{ route('posts.index') }}" class="btn btn-success btn-sm" title="All Posts">
-                            <i class="fa fa-arrow-left" aria-hidden="true"></i> Go Back
-                        </a>
-                        <br/>
-                        <br/>
-                        <div class="table-responsive">
-                            <form action="{{ route('posts.update',['id' => $post->id]) }}" method="post">
-                                <input type="hidden" name="_method" value="PUT">
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <div class="card">
-
-                                    <div class="card-block">
-                                        <div class="form-group">
+        <div class="panel panel-default">
+            <div class="panel-heading">Edit article</div>
+                <div class="panel-body">
+                    <a href="{{ route('posts.index') }}" class="btn btn-success btn-sm" title="All Posts">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i> Go Back
+                    </a>
+                    <div class="table-responsive">
+                        <form action="{{ route('posts.update',['id' => $post->id]) }}" method="post">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <div class="card">
+                                <div class="form-group">
                                             <label for="title">Title</label>
                                             <input name="title" class="form-control" type="text" value="{{ $post->title }}" placeholder="title of article">
-                                        </div>
-
-                                        <div class="form-group">
+                                </div>
+                                <div class="form-group">
                                             <label for="content">Content</label>
                                             <textarea name="content" class="form-control" rows="10">{{ $post->content }}</textarea>
-                                        </div>
-                                        <div class="form-group">
+                                </div>
+                                <div class="form-group">
 
                                             <label for="category_id">Select Category</label>
 
@@ -58,9 +52,8 @@
                                             @endforeach
                                             </select>
 
-                                        </div>
-
-                                        <div class="form-group row">
+                                </div>
+                                <div class="form-group">
                                             <label class="col-md-3 col-form-label">Is Active</label>
                                             <div class="col-md-9">
                                                   <label class="radio-inline" for="inline-radio1">
@@ -70,10 +63,8 @@
                                                     <input type="radio" id="inline-radio2" name="is_active" value="0"> No
                                                   </label>
                                             </div>
-                                        </div>
-
-
-                                        <div class="form-group">
+                                </div>
+                                <div class="form-group">
                                             <label for="tags">Select Tags</label>
                                             <select name="tags[]" id="tags" class="form-control state-tags-multiple" multiple="multiple">
                                             @foreach($tags as $key => $value)
@@ -83,35 +74,24 @@
                                               </option>
                                             @endforeach
                                             </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-footer text-muted">
+                                </div>
+                                <div class="card-footer text-muted">
                                         <div class="pull-right">
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </div>
-                                    </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-
                 </div>
-            </div>
         </div>
     </div>
+  </div>
+</div>
 
 @endsection
 @section('scripts')
-<script>
 
-        $('').select2({
-            placeholder: 'Choose A Tag',
-            tags: true
-        });
-
-
-        $('#tags').select2().val({!! json_encode($post->tags()->allRelatedIds()->toArray()) !!}).trigger('change');
 </script>
 
 @endsection

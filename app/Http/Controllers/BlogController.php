@@ -16,14 +16,9 @@ class BlogController extends Controller
 
     public function index()
     {
-
-        // $posts = DB::table('posts')->paginate(7);
         $posts = DB::table('posts')->paginate(7)->onEachSide(1);
-        return view('blog.index2', ['posts' => $posts]);
-
+        return view('blog.index', ['posts' => $posts]);
     }
-
-
 
     public function index3()
     {
@@ -67,6 +62,36 @@ class BlogController extends Controller
 
         return view('blog.show3', ['post' => $post]);
 
+    }
+
+
+    // PostsController, метод showBySlug:
+    public function showBySlug($slug)
+    {
+        /**
+            * Вначале мы проверяем, не является ли слаг числом.
+            * Часто слаги внедряют в программу уже после того,
+            * как был другой механизм построения пути.
+            * Например, через числовые индексы.
+            * Тогда может получится ситуация, что пользователь,
+            * зайдя на сайт по старой ссылке, увидит 404 ошибку,
+            * что такой страницы не существует.
+        */
+        if (is_numeric($slug)) {
+            // Get post for slug.
+            $post = \App\Post::findOrFail($slug);
+            return Redirect::to(route('blog.show', $post->slug), 301);
+            // 301 редирект со старой страницы, на новую.
+        }
+        // Get post for slug.
+        $post = \App\Post::whereSlug($slug)->firstOrFail();
+        return view(
+            'blog.show',
+            [
+                'post' => $post,
+                'hescomment' => true
+            ]
+        );
     }
 
     /**

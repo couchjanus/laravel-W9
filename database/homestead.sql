@@ -26,3 +26,6 @@ WITH (
 );
 ALTER TABLE public.migrations
   OWNER TO dev;
+
+
+
