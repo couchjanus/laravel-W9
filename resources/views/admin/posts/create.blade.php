@@ -15,7 +15,7 @@
             </div>
         </div>
         @endif
-    
+
         <div class="row">
             @include('admin.sidebar')
 
@@ -54,6 +54,18 @@
 
                                     </div>
 
+                                    <div class="form-group row">
+                                        <label class="col-md-3 col-form-label">Is Active</label>
+                                        <div class="col-md-9">
+                                          <label class="radio-inline" for="inline-radio1">
+                                            <input type="radio" id="inline-radio1" name="is_active" value="1"> Yes
+                                          </label>
+                                          <label class="radio-inline" for="inline-radio2">
+                                            <input type="radio" id="inline-radio2" name="is_active" value="0"> No
+                                          </label>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="tags">Select Tags</label>
                                         <select name="tags[]" id="tags" class="form-control state-tags-multiple" multiple="multiple">
@@ -62,7 +74,7 @@
                                                 {{ $tag->name }}
                                             </option>
                                         @endforeach
-                                        
+
                                         </select>
 
                                     </div>
@@ -91,10 +103,10 @@
 
         $('').select2({
             placeholder: 'Choose A Tag',
-            tags: true 
+            tags: true
         });
 
-        
+
         $('#tags').select2().val({!! json_encode($post->tags()->allRelatedIds()->toArray()) !!}).trigger('change');
 </script>
 

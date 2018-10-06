@@ -25,3 +25,6 @@ Route::get('admin', 'Admin\DashboardController');
 
 Route::resource('posts', 'Admin\PostController');
 Route::resource('categories', 'Admin\CategoryController');
+Route::resource('tags', 'Admin\TagController');
+
+Route::get('/test', 'TestController@index');

@@ -15,7 +15,7 @@
             </div>
         </div>
         @endif
-    
+
         <div class="row">
             @include('admin.sidebar')
 
@@ -33,7 +33,7 @@
                                 <input type="hidden" name="_method" value="PUT">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="card">
-                                    
+
                                     <div class="card-block">
                                         <div class="form-group">
                                             <label for="title">Title</label>
@@ -47,7 +47,7 @@
                                         <div class="form-group">
 
                                             <label for="category_id">Select Category</label>
-                                            
+
                                             <select name="category_id" class="form-control selectpicker">
                                             @foreach ($categories as $key => $value)
                                                 <option value="{{ $key }}"
@@ -57,14 +57,27 @@
                                                 >{{ $value }}</option>
                                             @endforeach
                                             </select>
-                                            
+
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-form-label">Is Active</label>
+                                            <div class="col-md-9">
+                                                  <label class="radio-inline" for="inline-radio1">
+                                                    <input type="radio" id="inline-radio1" name="is_active" value="1" @if (old('is_active', $post->is_active)) checked="checked" @endif> Yes
+                                                  </label>
+                                                  <label class="radio-inline" for="inline-radio2">
+                                                    <input type="radio" id="inline-radio2" name="is_active" value="0"> No
+                                                  </label>
+                                            </div>
+                                        </div>
+
 
                                         <div class="form-group">
                                             <label for="tags">Select Tags</label>
                                             <select name="tags[]" id="tags" class="form-control state-tags-multiple" multiple="multiple">
                                             @foreach($tags as $key => $value)
-                                              <option value="{{ $key }}" 
+                                              <option value="{{ $key }}"
                                                {{ (collect(old('tags'))->contains($key)) ? 'selected':'' }}  />
                                                {{ $value }}
                                               </option>
@@ -94,10 +107,10 @@
 
         $('').select2({
             placeholder: 'Choose A Tag',
-            tags: true 
+            tags: true
         });
 
-        
+
         $('#tags').select2().val({!! json_encode($post->tags()->allRelatedIds()->toArray()) !!}).trigger('change');
 </script>
 

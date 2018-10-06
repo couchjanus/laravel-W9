@@ -6,6 +6,9 @@ use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests\StoreCategoryRequest;
+
+
 class CategoryController extends Controller
 {
     /**
@@ -37,15 +40,13 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $category = new Category;
-
-        $category->name = $request->name;
-
-        $category->save();
-
-        return redirect(route('categories.index'));
+        // $category = new Category;
+        // $category->name = $request->name;
+        // $category->save();
+        $category = Category::create($request->all());
+        return redirect(route('categories.index'))->with('success', 'An category has been added successfully');;
     }
 
     /**
