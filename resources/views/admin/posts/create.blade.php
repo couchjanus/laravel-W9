@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="col-form-label"> Is Active: </label>
                                 <label class="radio-inline" for="inline-radio1">
-                                    <input type="radio" id="inline-radio1" name="is_active" value="1"> Yes
+                                    <input type="radio" id="inline-radio1" name="is_active" value="1" checked="checked"> Yes
                                 </label>
                                 <label class="radio-inline" for="inline-radio2">
                                     <input type="radio" id="inline-radio2" name="is_active" value="0"> No
@@ -56,16 +56,14 @@
                             </div>
 
                             <div class="form-group">
-                                            <label for="tags">Select Tags</label>
-                                            <select name="tags[]" id="tags" class="form-control state-tags-multiple" multiple="multiple">
-                                            @foreach($tags as $tag)
-                                                <option value="{{ $tag->id }}">
-                                                    {{ $tag->name }}
-                                                </option>
-                                            @endforeach
-
-                                            </select>
-
+                                <label for="tags">Select Tags</label>
+                                <select name="tags[]" id="tags" class="form-control state-tags-multiple" multiple="multiple">
+                                    @foreach($tags as $tag)
+                                        <option value="{{ $tag->id }}">
+                                            {{ $tag->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="card-footer text-muted">
                                         <div class="pull-right">
@@ -84,7 +82,15 @@
 
 @endsection
 @section('scripts')
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/select2.min.js"></script>
 <script>
+
+        $('#tags').select2({
+            allowClear: true,
+            placeholder: "Choose a tags",
+        });
 
 </script>
 

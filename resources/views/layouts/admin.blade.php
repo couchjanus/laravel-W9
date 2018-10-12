@@ -3,6 +3,7 @@
     @section('styles')
         <!-- Custom styles for this template -->
         <link href="/css/dashboard.css" rel="stylesheet">
+        <link href="/css/select2.min.css" rel="stylesheet">
     @endsection
 
     {{--Head--}}

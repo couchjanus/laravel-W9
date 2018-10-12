@@ -6,7 +6,7 @@ use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\CategoryFormRequest;
 
 
 class CategoryController extends Controller
@@ -40,7 +40,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(CategoryFormRequest $request)
     {
         // $category = new Category;
         // $category->name = $request->name;
@@ -81,14 +81,15 @@ class CategoryController extends Controller
      * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryFormRequest $request, $id)
     {
-        $category = Category::find($id);
+        // $category = Category::find($id);
 
-        $category->name = $request->input('name');
-        $category->save();
+        // $category->name = $request->input('name');
+        // $category->save();
 
-        return redirect(route('categories.index'));
+        Category::updateData($id);
+        return redirect(route('categories.index'))->with('success', 'An category has been updated successfully');
     }
 
     /**

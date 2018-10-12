@@ -31,7 +31,7 @@ class PostController extends Controller
     {
         $categories = \App\Category::all();
         $tags = \App\Tag::all();
-        return view('admin.posts.create')        ->with('categories', $categories)->withTags($tags);
+        return view('admin.posts.create')->with('categories', $categories)->withTags($tags);
     }
 
     /**
@@ -45,6 +45,11 @@ class PostController extends Controller
         $post = $request->all();
         $post = new Post($post);
         $post->save();
+
+        // $post->tags()->sync($request->input('tags'), false);
+
+        $post->tags()->syncWithoutDetaching($request->tags);
+
         return redirect(route('posts.index'))->with('succes', 'An article has been created successfully');
     }
 
@@ -69,7 +74,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        $tags = \App\Tag::all();
+        // $tags = \App\Tag::all();
+        $tags = \App\Tag::orderBy('name')->pluck('name', 'id');
         $categories = \App\Category::pluck('name', 'id');
         $data = ['post' => $post, 'categories' => $categories];
         return view('admin.posts.edit', $data)->withTags($tags);
@@ -91,6 +97,7 @@ class PostController extends Controller
         $post->is_active = $request->is_active;
 
         $post->save();
+        $post->tags()->toggle($request->tags);
         return redirect(route('posts.index'))->with('success', 'An article has been updated successfully');
     }
 
