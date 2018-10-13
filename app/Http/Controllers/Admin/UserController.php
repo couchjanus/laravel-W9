@@ -13,6 +13,16 @@ use App\Http\Requests\UserUpdateRequest;
 class UserController extends Controller
 {
     /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        // $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -48,7 +58,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles = \App\Role::get()->pluck('name', 'id');
+        return view('admin.users.create')->withRoles($roles);
     }
 
     /**
@@ -66,6 +77,11 @@ class UserController extends Controller
             'password'         => bcrypt($request->input('password')),
             ]
         );
+
+        $user->roles()->sync($request->input('role_list'), false);
+
+        $profile = new \App\Profile();
+        $user->profile()->save($profile);
 
         $user->save();
         return redirect(route('users.index'))->with('success', 'An user has been created successfully');
@@ -93,7 +109,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.users.edit')->withUser($user);
+        $roles = Role::get()->pluck('name', 'id');
+        return view('admin.users.edit')->withUser($user)->withRoles($roles);
     }
 
     /**
@@ -105,11 +122,11 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        $currentUser = Auth::user();
-        $user = User::find($id);
-        $user = $request->all();
-        $user->save();
-        return back()->with('success', 'User has been updated successfully');
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        $user->roles()->sync($request->input('role_list'));
+
+        return redirect(route('users.index'))->with('success', 'User has been updated successfully');
 
     }
 

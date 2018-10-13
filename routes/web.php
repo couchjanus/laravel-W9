@@ -75,3 +75,6 @@ Route::post('/contact', 'ContactController@store')->name('contact');
 Route::get('social/{provider}', 'Auth\SocialController@redirect')->name('social.redirect');
 
 Route::get('social/{provider}/callback', 'Auth\SocialController@handle')->name('social.handle');
+
+Route::get('/gate', 'BlogController@gate');
+Route::get('/private', 'HomeController@private')->name('private');
