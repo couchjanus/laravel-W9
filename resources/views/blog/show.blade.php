@@ -14,12 +14,11 @@
                 You are not allowed to access this resource now!
             @endalert
 
-
             @includeIf('blog.partials._single-post', ['post' => $post])
+
+            @includeWhen($hescomment, 'blog.partials._comments', ['some' => 'data'])
           </div>
           <!-- /.blog-main -->
-
-
 
     @endsection
 
@@ -30,4 +29,3 @@
 
 </main>
 <!-- /.container -->
-

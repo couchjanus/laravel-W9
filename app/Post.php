@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use App\Traits\HasComments;
 
 class Post extends Model
 {
     use Sluggable;
+    use HasComments;
+    
     protected $fillable = [
         'title', 'content', 'category_id', 'is_active',
     ];

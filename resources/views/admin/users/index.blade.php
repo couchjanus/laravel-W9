@@ -27,7 +27,7 @@
               <table class="table table-hover">
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th>Online</th>
                     <th>Username</th>
                     <th>Email</th>
                     <th>First Name</th>
@@ -39,7 +39,13 @@
                 <tbody>
                     @foreach($users as $user)
                     <tr>
-                        <td>{{ $user->id }}</td>
+                        <td>
+                          @if($user->isOnline())
+                            <span style="color:green">Online</span>
+                          @else
+                            <span style="color:red">Offline</span>
+                          @endif
+                        </td>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{$user->first_name}}</td>

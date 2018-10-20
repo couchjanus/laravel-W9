@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Contact;
 use App\Rules\Captcha;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactEmail;
+use App\Http\Requests\ContactFormRequest;
 
 class ContactController extends Controller
 {
@@ -15,9 +18,9 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::all();
+        // $contacts = Contact::all();
 
-        return view('contact.index', compact('contacts'));
+        return view('contact.index');
     }
 
     /**
@@ -26,23 +29,22 @@ class ContactController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContactFormRequest $request)
     {
-        $validatedData = $request->validate(
-            [
-            'email' => 'required|string|email|max:255|unique:users',
-            'message' => 'required|string|min:10|max:2000',
-            'g-recaptcha-response' => new Captcha()
-            ]
-        );
-
         Contact::create(
             [
-            'email' => $validatedData['email'],
-            'message' => $validatedData['message']
+            'email' => $request['email'],
+            'message' => $request['message']
             ]
         );
 
-        return redirect()->back()->with('message', 'Contact us query submitted successfully');
+       $contact = [];
+       $contact['name'] = $request->get('name');
+       $contact['email'] = $request->get('email');
+       $contact['message'] = $request->get('message');
+
+       Mail::to(config('mail.support.address'))->send(new ContactEmail($contact));
+
+      return redirect()->route('contact.index')->with('success', 'Your message has been sent successfully!');;
     }
 }

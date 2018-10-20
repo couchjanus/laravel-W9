@@ -77,7 +77,7 @@
                 </div>
             </div>
         </nav>
-
+        @yield('jumbotron')
         <main class="py-4">
             @yield('content')
         </main>
