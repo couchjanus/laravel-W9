@@ -5,12 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use App\Traits\HasComments;
+use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
     use Sluggable;
     use HasComments;
-    
+
+    use Searchable;
+
+
     protected $fillable = [
         'title', 'content', 'category_id', 'is_active',
     ];

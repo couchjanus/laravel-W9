@@ -20,7 +20,11 @@ Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 Route::get('/about', 'AboutController');
 
 Route::get('blog', ['uses' => 'BlogController@index', 'as' => 'blog']);
-Route::get('blog/{slug}', ['uses' => 'BlogController@show', 'as' => 'blog.show']);
+
+// Route::get('blog/{slug}', ['uses' => 'BlogController@show', 'as' => 'blog.show']);
+
+Route::get('blog/{slug}', ['uses' => 'PostController@show', 'as' => 'blog.show']);
+
 
 // Для назначения нескольких посредников для маршрута:
 Route::get('admin', 'Admin\DashboardController')->middleware('auth', 'admin');
@@ -54,4 +58,14 @@ Route::get('/private', 'HomeController@private')->name('private');
 
 Route::get('/email', function () {
     return new App\Mail\ContactEmail();
+});
+
+
+use \App\Repositories\ArticlesRepository;
+
+Route::get('/search', function (ArticlesRepository $repository) {
+   $articles = $repository->search((string) request('q'));
+   return view('articles.index', [
+       'articles' => $articles,
+   ]);
 });
